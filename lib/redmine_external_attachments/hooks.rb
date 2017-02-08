@@ -8,7 +8,6 @@ module RedmineExternalAttachments
       container = context[:issue]
       options = {}
       options.assert_valid_keys(:author)
-      p container.external_attachments
       attachments = container.external_attachments.preload(:author).to_a
       if attachments.any?
         options = {
@@ -22,6 +21,11 @@ module RedmineExternalAttachments
             :options => options
           }
       end
+    end
+
+    def view_issues_edit_notes_bottom(context)
+      result = context[:hook_caller].render :partial => 'external_attachments/form', :locals => {:container => context[:issue]}
+      "<p>#{result}</p>"
     end
   end
 end
